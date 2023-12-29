@@ -1,11 +1,13 @@
 import React from 'react';
 import { ToDoItem } from '../ToDoItem/ToDoItem';
 import style from './ToDoList.module.css';
+import useRefresh from '../../hooks/useRefresh';
 
 export const ToDoList = () => {
+	const { refreshProducts, handleRefresh } = useRefresh();
 	const [toDos, setToDos] = React.useState([]);
 	const [inputValue, setInputValue] = React.useState('');
-	const [refreshProducts, setRefreshProducts] = React.useState(false);
+
 	const [sort, setSort] = React.useState(false);
 	const [search, setSearch] = React.useState('');
 
@@ -27,7 +29,7 @@ export const ToDoList = () => {
 			});
 			setToDos(sortedToDos);
 		} else {
-			setRefreshProducts(!refreshProducts);
+			handleRefresh();
 		}
 	}, [sort]);
 
@@ -52,7 +54,7 @@ export const ToDoList = () => {
 	const onClickSearch = (event) => {
 		event.preventDefault();
 		if (!search.trim()) {
-			setRefreshProducts(!refreshProducts);
+			handleRefresh();
 		} else {
 			setToDos((toDos) => toDos.filter((obj) => obj.title.includes(search)));
 			setSearch('');
@@ -99,12 +101,15 @@ export const ToDoList = () => {
 					<ToDoItem
 						key={obj.id}
 						objID={obj.id}
-						title={obj.title}
+						title={
+							obj.title.length > 15
+								? obj.title.substring(0, 15) + '...'
+								: obj.title
+						}
 						setToDos={setToDos}
 						toDos={toDos}
-						setRefreshProducts={setRefreshProducts}
-						refreshProducts={refreshProducts}
 						completed={obj.completed}
+						handleRefresh={handleRefresh}
 					/>
 				);
 			})}

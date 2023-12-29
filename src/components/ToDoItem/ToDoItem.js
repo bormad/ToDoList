@@ -1,20 +1,16 @@
 import React from 'react';
 import style from './ToDoItem.module.css';
+import { Link, useParams } from 'react-router-dom';
 
-export const ToDoItem = ({
-	title,
-	objID,
-	setRefreshProducts,
-	refreshProducts,
-	completed
-}) => {
+export const ToDoItem = ({ title, objID, handleRefresh, completed }) => {
+	const { id } = useParams();
 	const [showFormToChangeToDo, setShowFormToChangeToDo] = React.useState(false);
 	const [newValueToDo, setNewValueToDo] = React.useState('');
 
 	const deleteToDoItem = (index) => {
 		fetch(`http://localhost:3004/todos/${index}`, {
 			method: 'DELETE'
-		}).then(() => setRefreshProducts(!refreshProducts));
+		}).then(() => handleRefresh());
 	};
 
 	const onClickCompleted = (event) => {
@@ -28,7 +24,7 @@ export const ToDoItem = ({
 				completed: !completed
 			})
 		})
-			.then(() => setRefreshProducts(!refreshProducts))
+			.then(() => handleRefresh())
 			.finally(() => setShowFormToChangeToDo(false));
 	};
 
@@ -46,7 +42,7 @@ export const ToDoItem = ({
 				completed: completed
 			})
 		})
-			.then(() => setRefreshProducts(!refreshProducts))
+			.then(() => handleRefresh())
 			.finally(() => setShowFormToChangeToDo(false));
 	};
 
@@ -70,18 +66,34 @@ export const ToDoItem = ({
 						checked={completed}
 						onClick={onClickCompleted}
 					/>
-					{title}
+					<Link className={style.Title} to={`/task/${objID}`}>
+						{title}
+					</Link>
 				</div>
 			)}
 
 			<div>
-				{showFormToChangeToDo ? null : (
-					<button onClick={() => setShowFormToChangeToDo(true)}>
-						Изменить
-					</button>
-				)}
-				<button onClick={() => deleteToDoItem(objID)}>Удалить</button>
+				{id ? (
+					showFormToChangeToDo ? null : (
+						<>
+							<button onClick={() => setShowFormToChangeToDo(true)}>
+								Изменить
+							</button>
+
+							<Link to={`/`}>
+								<button onClick={() => deleteToDoItem(objID)}>Удалить </button>
+							</Link>
+						</>
+					)
+				) : null}
 			</div>
+			{/* {id ? (
+				<Link to={`/`}>
+					<button>Вернуться на главную</button>
+				</Link>
+			) : (
+
+			)} */}
 		</div>
 	);
 };

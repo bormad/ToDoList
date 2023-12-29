@@ -8,3 +8,7 @@
 button {
 	height: 20px;
 }
+.Title {
+	text-decoration: none;
+	color: black;
+}
