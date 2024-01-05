@@ -6,24 +6,24 @@
       "completed": true
     },
     {
+      "id": 2,
       "title": "321",
+      "completed": false
+    },
+    {
+      "title": "Почистить зубы",
       "completed": false,
       "id": 3
     },
     {
-      "title": "321",
+      "title": "Почитать книгу",
       "completed": false,
       "id": 4
     },
     {
-      "title": "123",
+      "title": "А",
       "completed": false,
       "id": 5
-    },
-    {
-      "title": "333333333333333333333333333333333333",
-      "completed": false,
-      "id": 6
     }
   ]
 }

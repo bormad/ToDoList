@@ -2,25 +2,16 @@ import React from 'react';
 import { ToDoItem } from '../ToDoItem/ToDoItem';
 import style from './ToDoList.module.css';
 import useRefresh from '../../hooks/useRefresh';
-
+import { AppContext } from '../context';
 export const ToDoList = () => {
 	const { refreshProducts, handleRefresh } = useRefresh();
-	const [toDos, setToDos] = React.useState([]);
+	const { toDos, setToDos } = React.useContext(AppContext);
 	const [inputValue, setInputValue] = React.useState('');
 
 	const [sort, setSort] = React.useState(false);
 	const [search, setSearch] = React.useState('');
 
 	let id;
-
-	React.useEffect(() => {
-		fetch('http://localhost:3004/todos')
-			.then((response) => response.json())
-			.then((json) => {
-				setToDos(json);
-				id = json.length + 1;
-			});
-	}, [refreshProducts]);
 
 	React.useEffect(() => {
 		if (sort) {
@@ -96,21 +87,9 @@ export const ToDoList = () => {
 				</div>
 			</div>
 
-			{toDos.map((obj) => {
+			{toDos?.map((obj) => {
 				return (
-					<ToDoItem
-						key={obj.id}
-						objID={obj.id}
-						title={
-							obj.title.length > 15
-								? obj.title.substring(0, 15) + '...'
-								: obj.title
-						}
-						setToDos={setToDos}
-						toDos={toDos}
-						completed={obj.completed}
-						handleRefresh={handleRefresh}
-					/>
+					<ToDoItem key={obj.id} objID={obj.id} handleRefresh={handleRefresh} />
 				);
 			})}
 		</>

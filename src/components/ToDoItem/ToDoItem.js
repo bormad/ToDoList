@@ -1,11 +1,18 @@
 import React from 'react';
 import style from './ToDoItem.module.css';
 import { Link, useParams } from 'react-router-dom';
+import { AppContext } from '../context';
 
-export const ToDoItem = ({ title, objID, handleRefresh, completed }) => {
+export const ToDoItem = ({ objID, handleRefresh }) => {
+	const { toDos } = React.useContext(AppContext);
 	const { id } = useParams();
 	const [showFormToChangeToDo, setShowFormToChangeToDo] = React.useState(false);
 	const [newValueToDo, setNewValueToDo] = React.useState('');
+	let currentToDo = toDos?.filter((obj) => {
+		console.log('obj', obj, 'objID', objID);
+		return obj.id === objID;
+	});
+	let { title, completed } = currentToDo[0];
 
 	const deleteToDoItem = (index) => {
 		fetch(`http://localhost:3004/todos/${index}`, {
@@ -30,9 +37,6 @@ export const ToDoItem = ({ title, objID, handleRefresh, completed }) => {
 
 	const onClickChangeToDo = (event) => {
 		event.preventDefault();
-		console.log(newValueToDo);
-		// Отправка на сервер
-		console.log(objID);
 		fetch(`http://localhost:3004/todos/${objID}`, {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json;charset=utf-8' },
@@ -87,13 +91,11 @@ export const ToDoItem = ({ title, objID, handleRefresh, completed }) => {
 					)
 				) : null}
 			</div>
-			{/* {id ? (
+			{id ? (
 				<Link to={`/`}>
 					<button>Вернуться на главную</button>
 				</Link>
-			) : (
-
-			)} */}
+			) : null}
 		</div>
 	);
 };
