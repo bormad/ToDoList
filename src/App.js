@@ -20,7 +20,7 @@ export const App = () => {
 	}, [refreshProducts]);
 
 	return (
-		<AppContext.Provider value={{ toDos, setToDos }}>
+		<AppContext.Provider value={{ toDos, setToDos, handleRefresh }}>
 			<div className='App'>
 				<Routes>
 					<Route path='/' element={<ToDoList />} />

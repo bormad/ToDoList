@@ -4,6 +4,7 @@ const useRefresh = () => {
 	const [refreshProducts, setRefreshProducts] = React.useState(false);
 
 	const handleRefresh = () => {
+		console.log('REFRESH');
 		setRefreshProducts(!refreshProducts);
 	};
 

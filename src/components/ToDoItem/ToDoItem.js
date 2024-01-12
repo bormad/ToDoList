@@ -3,21 +3,20 @@ import style from './ToDoItem.module.css';
 import { Link, useParams } from 'react-router-dom';
 import { AppContext } from '../context';
 
-export const ToDoItem = ({ objID, handleRefresh }) => {
-	const { toDos } = React.useContext(AppContext);
+export const ToDoItem = ({ objID }) => {
+	const { toDos, handleRefresh } = React.useContext(AppContext);
 	const { id } = useParams();
 	const [showFormToChangeToDo, setShowFormToChangeToDo] = React.useState(false);
 	const [newValueToDo, setNewValueToDo] = React.useState('');
-	let currentToDo = toDos?.filter((obj) => {
-		console.log('obj', obj, 'objID', objID);
-		return obj.id === objID;
-	});
-	let { title, completed } = currentToDo[0];
+	const currentToDo = toDos?.filter((obj) => obj.id === objID);
+	const { title, completed } = currentToDo[0];
 
 	const deleteToDoItem = (index) => {
 		fetch(`http://localhost:3004/todos/${index}`, {
 			method: 'DELETE'
-		}).then(() => handleRefresh());
+		})
+			.then(() => handleRefresh())
+			.catch((error) => console.error(error));
 	};
 
 	const onClickCompleted = (event) => {
@@ -32,6 +31,7 @@ export const ToDoItem = ({ objID, handleRefresh }) => {
 			})
 		})
 			.then(() => handleRefresh())
+			.catch((error) => console.error(error))
 			.finally(() => setShowFormToChangeToDo(false));
 	};
 
@@ -47,6 +47,7 @@ export const ToDoItem = ({ objID, handleRefresh }) => {
 			})
 		})
 			.then(() => handleRefresh())
+			.catch((error) => console.error(error))
 			.finally(() => setShowFormToChangeToDo(false));
 	};
 
@@ -85,7 +86,7 @@ export const ToDoItem = ({ objID, handleRefresh }) => {
 							</button>
 
 							<Link to={`/`}>
-								<button onClick={() => deleteToDoItem(objID)}>Удалить </button>
+								<button onClick={() => deleteToDoItem(objID)}>Удалить</button>
 							</Link>
 						</>
 					)

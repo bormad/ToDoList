@@ -2,28 +2,23 @@
   "todos": [
     {
       "id": 1,
-      "title": "123",
+      "title": "321",
       "completed": true
     },
     {
-      "id": 2,
-      "title": "321",
-      "completed": false
-    },
-    {
-      "title": "Почистить зубы",
-      "completed": false,
-      "id": 3
-    },
-    {
-      "title": "Почитать книгу",
-      "completed": false,
-      "id": 4
-    },
-    {
+      "id": 5,
       "title": "А",
+      "completed": true
+    },
+    {
+      "title": "321",
       "completed": false,
-      "id": 5
+      "id": 6
+    },
+    {
+      "title": "321",
+      "completed": false,
+      "id": 7
     }
   ]
 }

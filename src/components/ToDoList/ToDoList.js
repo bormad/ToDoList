@@ -1,11 +1,9 @@
 import React from 'react';
 import { ToDoItem } from '../ToDoItem/ToDoItem';
 import style from './ToDoList.module.css';
-import useRefresh from '../../hooks/useRefresh';
 import { AppContext } from '../context';
 export const ToDoList = () => {
-	const { refreshProducts, handleRefresh } = useRefresh();
-	const { toDos, setToDos } = React.useContext(AppContext);
+	const { toDos, setToDos, handleRefresh } = React.useContext(AppContext);
 	const [inputValue, setInputValue] = React.useState('');
 
 	const [sort, setSort] = React.useState(false);
@@ -88,9 +86,7 @@ export const ToDoList = () => {
 			</div>
 
 			{toDos?.map((obj) => {
-				return (
-					<ToDoItem key={obj.id} objID={obj.id} handleRefresh={handleRefresh} />
-				);
+				return <ToDoItem key={obj.id} objID={obj.id} />;
 			})}
 		</>
 	);
