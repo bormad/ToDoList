@@ -1,24 +1,19 @@
 {
   "todos": [
     {
-      "id": 1,
-      "title": "321",
+      "id": 3,
+      "title": "1",
+      "completed": true
+    },
+    {
+      "id": 4,
+      "title": "213",
       "completed": true
     },
     {
       "id": 5,
-      "title": "А",
+      "title": "3",
       "completed": true
-    },
-    {
-      "title": "321",
-      "completed": false,
-      "id": 6
-    },
-    {
-      "title": "321",
-      "completed": false,
-      "id": 7
     }
   ]
 }

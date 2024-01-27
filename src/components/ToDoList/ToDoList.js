@@ -1,9 +1,10 @@
 import React from 'react';
 import { ToDoItem } from '../ToDoItem/ToDoItem';
 import style from './ToDoList.module.css';
-import { AppContext } from '../context';
+import { useDispatch, useSelector } from 'react-redux';
 export const ToDoList = () => {
-	const { toDos, setToDos, handleRefresh } = React.useContext(AppContext);
+	const toDos = useSelector((state) => state.toDos);
+	const dispatch = useDispatch();
 	const [inputValue, setInputValue] = React.useState('');
 
 	const [sort, setSort] = React.useState(false);
@@ -11,16 +12,15 @@ export const ToDoList = () => {
 
 	let id;
 
-	React.useEffect(() => {
-		if (sort) {
-			const sortedToDos = [...toDos].sort((a, b) => {
-				return a.title.localeCompare(b.title);
-			});
-			setToDos(sortedToDos);
+	const onClickSort = () => {
+		if (!sort) {
+			dispatch({ type: 'SORT_TODO' });
+			setSort(!sort);
 		} else {
-			handleRefresh();
+			dispatch({ type: 'NOT_SORT_TODO' });
+			setSort(!sort);
 		}
-	}, [sort]);
+	};
 
 	const onClickAddToDo = (event) => {
 		event.preventDefault();
@@ -35,17 +35,15 @@ export const ToDoList = () => {
 				})
 			})
 				.then((response) => response.json())
-				.then((json) => setToDos([...toDos, json]));
+				.then((json) => dispatch({ type: 'SET_TODO', payload: json }));
 		}
 		setInputValue('');
 	};
 
 	const onClickSearch = (event) => {
 		event.preventDefault();
-		if (!search.trim()) {
-			handleRefresh();
-		} else {
-			setToDos((toDos) => toDos.filter((obj) => obj.title.includes(search)));
+		if (!!search.trim()) {
+			dispatch({ type: 'SEARCH_TODO', payload: search });
 			setSearch('');
 		}
 	};
@@ -76,11 +74,7 @@ export const ToDoList = () => {
 				</form>
 
 				<div>
-					<input
-						type='checkbox'
-						checked={sort}
-						onClick={() => setSort(!sort)}
-					/>
+					<input type='checkbox' onChange={onClickSort} />
 					Отсортировать по алфавиту
 				</div>
 			</div>

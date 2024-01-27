@@ -1,10 +1,10 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ToDoItem } from '../../components/ToDoItem/ToDoItem';
-import { AppContext } from '../../components/context';
+import { useSelector } from 'react-redux';
 
 export const Task = () => {
-	const { toDos } = React.useContext(AppContext);
+	const toDos = useSelector((state) => state.toDos);
 	const { id } = useParams();
 
 	return (

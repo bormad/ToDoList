@@ -1,10 +1,11 @@
 import React from 'react';
 import style from './ToDoItem.module.css';
 import { Link, useParams } from 'react-router-dom';
-import { AppContext } from '../context';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const ToDoItem = ({ objID }) => {
-	const { toDos, handleRefresh } = React.useContext(AppContext);
+	const toDos = useSelector((state) => state.toDos);
+	const dispatch = useDispatch();
 	const { id } = useParams();
 	const [showFormToChangeToDo, setShowFormToChangeToDo] = React.useState(false);
 	const [newValueToDo, setNewValueToDo] = React.useState('');
@@ -15,22 +16,29 @@ export const ToDoItem = ({ objID }) => {
 		fetch(`http://localhost:3004/todos/${index}`, {
 			method: 'DELETE'
 		})
-			.then(() => handleRefresh())
+			.then(() => dispatch({ type: 'DELETE_TODO', payload: index }))
 			.catch((error) => console.error(error));
 	};
 
 	const onClickCompleted = (event) => {
 		event.preventDefault();
+		const newCompleted = !completed;
 		fetch(`http://localhost:3004/todos/${objID}`, {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json;charset=utf-8' },
 			body: JSON.stringify({
 				id: objID,
 				title: title,
-				completed: !completed
+				completed: newCompleted
 			})
 		})
-			.then(() => handleRefresh())
+			.then(() =>
+				dispatch({
+					type: 'CHANGE_COMPLETED_TODO',
+					payload: objID,
+					completed: newCompleted
+				})
+			)
 			.catch((error) => console.error(error))
 			.finally(() => setShowFormToChangeToDo(false));
 	};
@@ -46,9 +54,18 @@ export const ToDoItem = ({ objID }) => {
 				completed: completed
 			})
 		})
-			.then(() => handleRefresh())
+			.then(() =>
+				dispatch({
+					type: 'CHANGE_TITLE_TODO',
+					payload: objID,
+					title: newValueToDo
+				})
+			)
 			.catch((error) => console.error(error))
-			.finally(() => setShowFormToChangeToDo(false));
+			.finally(() => {
+				setShowFormToChangeToDo(false);
+				setNewValueToDo('');
+			});
 	};
 
 	return (
@@ -69,7 +86,7 @@ export const ToDoItem = ({ objID }) => {
 					<input
 						type='checkbox'
 						checked={completed}
-						onClick={onClickCompleted}
+						onChange={onClickCompleted}
 					/>
 					<Link className={style.Title} to={`/task/${objID}`}>
 						{title}
